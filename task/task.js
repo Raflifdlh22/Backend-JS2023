@@ -8,11 +8,7 @@ const showDownload = (result) => {
   console.log(`hasil download : + ${result}`);
 };
 
-/**
- *Function to download a file
- *@retuns {Promise<string>} - A Promise that resolves with the downloaded file name
- */
-
+4
 const download = () => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
