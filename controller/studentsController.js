@@ -1,18 +1,24 @@
+// import Model Student
+const Student = require("../models/Student"); 
 class studentController {
-  index(req, res) {
+  // menambahkan keyword async memberitahu proses asyncronous
+  async index(req, res) {
+    // memanggil method static all dengan async await
+    const studets = await Student.all();
+
     const data = {
       message: "menampilkan data student",
-      data: [],
+      data: studets,
     };
     res.send("menampilkan data student");
     res.json(data);
   }
 
-  store(req, res) {
+  async store(req, res) {
     const { nama } = req.body;
 
     const data = {
-      message: `menambahkan data student baru ${nama}`,
+      message: `menambahkan data student ${nama}`,
       data: [],
     };
     res.json(data);
@@ -30,19 +36,23 @@ class studentController {
   update(req, res) {
     const { id } = req.params;
     const { nama } = req.body;
+
     const data = {
       message: `mengedit student id ${id}, nama ${nama}`,
       data: [],
     };
+
     res.json(data);
   }
 
   destroy(req, res) {
     const { id } = req.params;
+
     const data = {
       message: `menghapus data student ${id}`,
       data: [],
     };
+
     res.json(data);
   }
 }
