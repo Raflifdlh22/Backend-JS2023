@@ -10,52 +10,85 @@ class studentController {
       message: "menampilkan data student",
       data: studets,
     };
-    res.send("menampilkan data student");
+
     res.json(data);
   }
 
   async store(req, res) {
-    const { nama } = req.body;
+    // memanggil method create dari Model Student
+    const students = await Student.create(req.body);
 
     const data = {
-      message: `menambahkan data student ${nama}`,
-      data: [],
+      message: `menambahkan data student`,
+      data: students,
     };
     res.json(data);
   }
 
-  show(req, res) {
+  async show(req, res) {
     const { id } = req.params;
-    const data = {
-      message: `menampilkan detail data student ${id}`,
-      data: [],
-    };
-    res.json(data);
+    // cari student berdasarkan id
+    const student = await Student.find(id);
+
+    if (student) {
+      const data = {
+        message: `menampilkan detail student id ${id}`,
+        data: student,
+      };
+      res.status(200).json(data);
+    } else {
+      const data = {
+        message: `student tidak ditemukan`,
+      };
+      res.status(404).json(data);
+    }
   }
 
-  update(req, res) {
-    const { id } = req.params;
-    const { nama } = req.body;
+  async update(req, res) {
+    const id = req.params.id
 
-    const data = {
-      message: `mengedit student id ${id}, nama ${nama}`,
-      data: [],
-    };
+    const student = await Student.find(id);
 
-    res.json(data);
+    if (student.length > 0) {
+      // update data
+      await Student.update (id, req.body);
+
+      const data = {
+        message: 'mengedit data student',
+        data: this.updateStudent
+      }
+
+      res.status(200).json(data)
+    } else {
+      // kembalikan pesan kesalahan
+      const data = {
+        message: "Data tidak ada"
+      }
+
+      res.status(404).json(data)
+    }
   }
 
-  destroy(req, res) {
+  async destroy(req, res) {
     const { id } = req.params;
-
-    const data = {
-      message: `menghapus data student ${id}`,
-      data: [],
+    const student = await Student.fins(id);
+    
+    if (student > 0) {
+      await Student.destroy(id);
+      
+      const data = {
+      message: `menghapus data student`
     };
-
-    res.json(data);
+    
+    return res.status(200).json(data);
+  } else{
+    const data = {
+      message: `student tidak ditemukan`,
+    };
+    return res.status(404).json(data);
   }
 }
 
+}
 // export objek controller
 module.exports = new studentController();
